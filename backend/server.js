@@ -17,7 +17,10 @@ app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
-const PORT = process.env.PORT || 3000;
+const authRoutes=require("./routes/auth.routes");
+app.use("/api/auth",authRoutes);
+
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
