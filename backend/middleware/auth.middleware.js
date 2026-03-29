@@ -1,11 +1,14 @@
 const jwt=require('jsonwebtoken');
 exports.protect=async(req,res,next)=>{
     try{
-        const token=await req.headers.authorization;
+        let token=req.headers.authorization;
+        if(token && token.startsWith('Bearer ')){
+            token = token.split(' ')[1];
+        }
         if(!token){
             return res.status(401).json('unauthorized');
         }
-        const decodedToken=await jwt.verify(token,process.env.JJWT_SECRET);
+        const decodedToken=jwt.verify(token,process.env.JWT_SECRET);
         req.user=decodedToken;
         next();
     }
