@@ -17,7 +17,7 @@ exports.addToCart = async (req, res) => {
          {
             cart = new Cart({
                 user: req.user.id,
-                items: [{ product: productId, quantity, price: product.price }]
+                items: [{ productId: productId, quantity, price: product.price}]
             })
         }
         else {
@@ -30,7 +30,8 @@ exports.addToCart = async (req, res) => {
             }
         }
          await cart.save();
-         res.status(200).json({message:"item added to cart",cart});
+         const cartTotal=cart.items.reduce((acc,item)=>acc+item.price*item.quantity,0);
+         res.status(200).json({message:"item added to cart",cart,cartTotal});
 
     }
     catch(error){
@@ -73,7 +74,7 @@ exports.updateCart = async (req, res) => {
         }
         item.quantity = quantity;
         await cart.save();
-        return res.status(200).json({ message: "cart updated successfully", cart });
+        return res.status(200).json({ message: "cart updated successfully", cart,cart });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

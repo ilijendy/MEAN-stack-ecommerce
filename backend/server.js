@@ -29,6 +29,9 @@ app.use("/api/product",productRoutes);
 const cartRouters=require('./routes/cart.routes');
 app.use('/api/cart',cartRouters);
    
+const orderRouter=require('./routes/order.routes');
+app.use('/api/order',orderRouter);
+
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {

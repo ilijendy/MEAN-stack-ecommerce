@@ -3,14 +3,14 @@ const mongoose=require('mongoose');
 const orderSchema=new mongoose.Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:user,
+        ref:'User',
         required:true
     },
     items:[
         {
             product:{
                 type:mongoose.Schema.Types.ObjectId,
-                ref:product,
+                ref:'Product',
                 required:true
             },
             quantity:{
@@ -34,15 +34,7 @@ const orderSchema=new mongoose.Schema({
         type:String,
         enum:['pending','processing','shipped','delivered','cancelled'],
         default:'pending'
-    },
-    createdAt:{
-        type:Date,
-        default:Date.now
-    },
-    updatedAt:{
-        type:Date,
-        default:Date.now
     }
 
-});
-module.exports=mongoose.model('orders',orderSchema);
+},{timestamps:true});
+module.exports=mongoose.model('Order',orderSchema);
