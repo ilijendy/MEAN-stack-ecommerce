@@ -1,1 +1,104 @@
-<p>register works!</p>
+<!-- pages/register/register.component.html -->
+<div class="register-wrapper">
+  <div class="register-card">
+    <div class="register-header">
+      <h2>Create an Account</h2>
+      <p>Join us today. Please fill in your details below.</p>
+    </div>
+
+    <!-- Error Message -->
+    @if (error) {
+    <div class="alert-error">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span>{{ error }}</span>
+    </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="register-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          [class.input-error]="f['name'].invalid && f['name'].touched"
+        />
+        <div class="error-container">
+          @if (f['name'].errors?.['required'] && f['name'].touched) {
+          <span class="error-text">Name is required</span>
+          }
+          @if (f['name'].errors?.['minlength'] && f['name'].touched) {
+          <span class="error-text">Name must be at least 3 characters</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          [class.input-error]="f['email'].invalid && f['email'].touched"
+        />
+        <div class="error-container">
+          @if (f['email'].errors?.['required'] && f['email'].touched) {
+          <span class="error-text">Email is required</span>
+          }
+          @if (f['email'].errors?.['email'] && f['email'].touched) {
+          <span class="error-text">Please enter a valid email</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [class.input-error]="f['password'].invalid && f['password'].touched"
+        />
+        <div class="error-container">
+          @if (f['password'].errors?.['required'] && f['password'].touched) {
+          <span class="error-text">Password is required</span>
+          }
+          @if (f['password'].errors?.['minlength'] && f['password'].touched) {
+          <span class="error-text">Password must be at least 6 characters</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          [class.input-error]="f['confirmPassword']?.invalid && f['confirmPassword']?.touched"
+        />
+        <div class="error-container">
+          @if (f['confirmPassword']?.errors?.['required'] && f['confirmPassword']?.touched) {
+          <span class="error-text">Confirm password is required</span>
+          }
+          @if (form.errors?.['mismatch'] && f['confirmPassword']?.touched) {
+          <span class="error-text">Passwords do not match</span>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading">
+        @if (!loading) {
+        <span>Sign Up</span>
+        }
+        @if (loading) {
+        <div class="spinner"></div>
+        }
+      </button>
+    </form>
+
+    <div class="register-footer">
+      <p>Already have an account? <a routerLink="/login">Log in here</a></p>
+    </div>
+  </div>
+</div>

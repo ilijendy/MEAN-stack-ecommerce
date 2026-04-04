@@ -4,7 +4,7 @@ import { Products } from './pages/products/products';
 import { ProductDetails } from './pages/product-details/product-details';
 import { Cart } from './pages/cart/cart';
 import { Login } from './pages/login/login';
-import { Register } from './pages/register/register';
+import { RegisterComponent } from './pages/register/register';
 import { authGuard } from './core/guards/auth-guard';
 import { Profile } from './pages/profile/profile';
 import { Dashboard } from './pages/admin/dashboard/dashboard';
@@ -23,7 +23,7 @@ export const routes: Routes = [
   {path:'product',component:Products},
   {path:'product/:id',component:ProductDetails},
   {path:'login',component:Login},
-  {path:'register',component:Register},
+  {path:'register',component:RegisterComponent},
 
   //protected
   {path:'cart',component:Cart,canActivate:[authGuard]},
@@ -39,3 +39,4 @@ export const routes: Routes = [
 
 
 ];
+  
