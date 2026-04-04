@@ -1,1 +1,66 @@
-<p>login works!</p>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>Welcome Back</h2>
+      <p>Log in to your account to continue.</p>
+    </div>
+
+    @if (error) {
+    <div class="alert-error">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span>{{ error }}</span>
+    </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          [class.input-error]="f['email'].invalid && f['email'].touched"
+        />
+        <div class="error-container">
+          @if (f['email'].errors?.['required'] && f['email'].touched) {
+          <span class="error-text">Email is required</span>
+          }
+          @if (f['email'].errors?.['email'] && f['email'].touched) {
+          <span class="error-text">Please enter a valid email</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [class.input-error]="f['password'].invalid && f['password'].touched"
+        />
+        <div class="error-container">
+          @if (f['password'].errors?.['required'] && f['password'].touched) {
+          <span class="error-text">Password is required</span>
+          }
+          @if (f['password'].errors?.['minlength'] && f['password'].touched) {
+          <span class="error-text">Password must be at least 6 characters</span>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading">
+        @if (!loading) {
+        <span>Log In</span>
+        }
+        @if (loading) {
+        <div class="spinner"></div>
+        }
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+    </div>
+  </div>
+</div>
