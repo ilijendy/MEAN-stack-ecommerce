@@ -72,15 +72,17 @@ exports.searchProducts=async(req,res)=>{
     }
     return res.status(200).json({message:"products fetched successfully",count:products.length,data:products});
 }
-exports.filterProductByCategory=(req,res)=>{
+exports.getProductByCategory=async(req,res)=>{
     try{
         const {category}=req.query;
         if(!category){
-            return res.status(400).json({message:"category is required"});
+            return res.status(404).json({message:"Category not found"});
         }
-        const products= Product.find({category});
-        if(!products){
-            return res.status(404).json({message:"products not found"});
+        const filter={};
+        filter.category=category;
+        const products=await Product.find(filter);
+        if(products.length===0){
+            return res.status(404).json({message:"No products found in this category"})
         }
         return res.status(200).json({message:"products fetched successfully",count:products.length,data:products});
     }

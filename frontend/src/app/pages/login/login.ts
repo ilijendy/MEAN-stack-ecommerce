@@ -26,7 +26,7 @@ export class Login {
     this.error='';
 
     const {email,password}=this.form.value;
-    this.auth.login({email:email!,passowrd:password!}).subscribe({
+    this.auth.login({email:email!,password:password!}).subscribe({
       next:()=>{
         this.loading=false;
         this.router.navigate(['/products']);

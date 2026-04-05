@@ -30,8 +30,8 @@ export class Auth {
     );
   }
 
-  login(data: { email: string; passowrd: string }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth?login`, data).pipe(
+  login(data: { email: string; password: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data).pipe(
       tap(res => this.setSession(res))
     );
   }
