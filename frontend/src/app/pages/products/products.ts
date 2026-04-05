@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnChanges, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/productservice';
 import { Iproduct } from '../../core/interfaces/iproduct';
@@ -10,26 +10,27 @@ import { Iproduct } from '../../core/interfaces/iproduct';
   styleUrl: './products.css',
 })
 export class Products implements OnInit, OnDestroy {
-  constructor(private productService:ProductService){}
-  products:Iproduct[]=[];
-  filterProducts:Iproduct[]=[];
-  selectedCategory:string='all';
-  searchQuery:string='';
-  categoreies=
-  [{label:'All Products',value:'all'},
-   {label:'Laptops',value:'laptop'},
-   {label:'Mobiles',value:'mobile'},
-   {label:'Accessories',value:'accessory'}]
-  error:string='';
-  loading:boolean=false;
+  private cdr = inject(ChangeDetectorRef);
+  constructor(private productService: ProductService) { }
+  products: Iproduct[] = [];
+  filterProducts: Iproduct[] = [];
+  selectedCategory: string = 'all';
+  searchQuery: string = '';
+  categoreies =
+    [{ label: 'All Products', value: 'all' },
+    { label: 'Laptops', value: 'laptop' },
+    { label: 'Mobiles', value: 'mobile' },
+    { label: 'Accessories', value: 'accessory' }]
+  error: string = '';
+  loading: boolean = false;
 
   // Slider state
   currentSlide = 0;
   slides = [
     {
-      title: 'Summer Collection',
-      description: 'Discover the hottest trends for this season with up to 50% off.',
-      image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1200'
+      title: 'Latest Laptops',
+      description: 'Discover the hottest trending laptops for this season with up to 50% off.',
+      image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&q=80&w=1200'
     },
     {
       title: 'New Gadgets',
@@ -46,15 +47,16 @@ export class Products implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.productService.getAllProduct().subscribe({
-      next:(res)=>{
-        this.products=res.data;
-        this.filterProducts=res.data;
-        this.loading=false;
-        
+      next: (res) => {
+        this.products = res.data;
+        this.filterProducts = res.data;
+        this.loading = false;
+        this.cdr.markForCheck();
       },
-      error:(err)=>{
-        this.error='Failed to load products';
-        this.loading=false;
+      error: (err) => {
+        this.error = 'Failed to load products';
+        this.loading = false;
+        this.cdr.markForCheck();
       }
     });
 
@@ -91,37 +93,46 @@ export class Products implements OnInit, OnDestroy {
     this.startSlider(); // reset interval
   }
 
-  filterByCategory(){
-    if(this.selectedCategory==="all"){
-      this.filterProducts=this.products;
+  filterByCategory() {
+    this.searchQuery = '';
+    if (this.selectedCategory === "all") {
+      this.filterProducts = this.products;
     }
-    else{
+    else {
+      this.loading = true;
       this.productService.getProductByCatagory(this.selectedCategory).subscribe({
-        next:(res)=>{
-          this.filterProducts=res.data;
-          this.loading=false;
+        next: (res) => {
+          this.filterProducts = res.data;
+          this.loading = false;
+          this.cdr.markForCheck();
         },
-        error:(err)=>{
-          this.error='Failed to load products';
-          this.loading=false;
+        error: (err) => {
+          this.filterProducts = [];
+          this.error = 'Failed to load products';
+          this.loading = false;
+          this.cdr.markForCheck();
         }
       });
     }
-    this.searchQuery='';
   }
-  searchProducts(){
-    if(this.searchQuery.trim()===''){
-      this.filterProducts=this.products;
+  searchProducts() {
+    this.selectedCategory = 'all';
+    if (this.searchQuery.trim() === '') {
+      this.filterProducts = this.products;
     }
-    else{
+    else {
+      this.loading = true;
       this.productService.searchProduct(this.searchQuery).subscribe({
-        next:(res)=>{
-          this.filterProducts=res.data;
-          this.loading=false;
+        next: (res) => {
+          this.filterProducts = res.data;
+          this.loading = false;
+          this.cdr.markForCheck();
         },
-        error:(err)=>{
-          this.error='Failed to load products';
-          this.loading=false;
+        error: (err) => {
+          this.filterProducts = [];
+          this.error = 'Failed to load products';
+          this.loading = false;
+          this.cdr.markForCheck();
         }
       })
     }

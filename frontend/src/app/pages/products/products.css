@@ -17,7 +17,7 @@
   overflow: hidden;
   margin-bottom: 40px;
   background: #000;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .slider-container {
@@ -181,14 +181,14 @@
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.25s ease, transform 0.25s ease;
   display: flex;
   flex-direction: column;
 }
 
 .product-card:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   transform: translateY(-3px);
 }
 
@@ -276,9 +276,11 @@
   .controls-section {
     flex-direction: column;
   }
+
   .search-input {
     width: 100%;
   }
+
   .products-grid {
     grid-template-columns: 1fr;
   }
@@ -288,12 +290,15 @@
   .hero-slider {
     height: 300px;
   }
+
   .slide-content h2 {
     font-size: 1.8rem;
   }
+
   .slide-content p {
     font-size: 0.95rem;
   }
+
   .slide-overlay {
     padding: 0 20px;
   }
