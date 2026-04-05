@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Auth } from '../../core/services/auth';
 import { Router, RouterLink } from '@angular/router';
@@ -11,7 +11,18 @@ import { CommonModule } from '@angular/common';
   styleUrl: './register.css',
 })
 export class RegisterComponent {
+  private cdr = inject(ChangeDetectorRef);
   constructor(private auth:Auth,private router:Router){}
+  showPassword = false;
+  showConfirmPassword = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   get f() {
     return this.form.controls;
@@ -34,6 +45,8 @@ export class RegisterComponent {
 
 
   submit() {
+    this.form.markAllAsTouched();
+    this.cdr.markForCheck();
     if (this.form.invalid) return;
 
     this.loading = true;
@@ -48,11 +61,12 @@ export class RegisterComponent {
     }).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error.message || 'Register failed';
+        this.error = err.error?.message || 'Register failed';
+        this.cdr.markForCheck();
       }
     });
   }
