@@ -8,7 +8,6 @@ const productSchema=new mongoose.Schema({
         trim:true,
         minlength:3,
         maxlength:100,
-        match:/^[a-zA-Z ]+$/
     },
     description:{
         type:String,
@@ -32,16 +31,14 @@ const productSchema=new mongoose.Schema({
         required:true,
         trim:true,
         minlength:3,
-        maxlength:50,
-        match:/^[a-zA-Z ]+$/
+        maxlength:100,
     },
     image:{
         type:String,
         required:true,
         trim:true,
         minlength:3,
-        maxlength:50,
-        match:/^[a-zA-Z ]+$/
+        maxlength:500,
     },featured:{
         type:Boolean,
         default:false

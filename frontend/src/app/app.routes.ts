@@ -19,7 +19,7 @@ export const routes: Routes = [
   {path:'', redirectTo:'home',pathMatch:'full'},
 
   //public
-  {path:'home',component:Home},
+  {path:'home',component:Products},
   {path:'product',component:Products},
   {path:'product/:id',component:ProductDetails},
   {path:'login',component:Login},

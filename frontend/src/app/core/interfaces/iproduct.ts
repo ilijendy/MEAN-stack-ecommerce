@@ -11,6 +11,7 @@ export interface Iproduct {
   updatedAt:string;
 }
 export interface ProductResponse {
-  count:number;
-  product:Iproduct;
+  message?: string;
+  count?: number;
+  data: any;
 }

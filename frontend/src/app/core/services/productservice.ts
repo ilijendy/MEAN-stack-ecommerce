@@ -7,17 +7,17 @@ import { Iproduct, ProductResponse } from '../interfaces/iproduct';
 @Injectable({
   providedIn: 'root',
 })
-export class Product {
+export class ProductService {
   constructor(private http:HttpClient){}
 
-  private apiUrl=environment.apiUrl+'/products';
+  private apiUrl=environment.apiUrl+'/product';
 
   getAllProduct():Observable<ProductResponse>{
     return this.http.get<ProductResponse>(`${this.apiUrl}`);
   }
 
   getProductByCatagory(category?:string):Observable<ProductResponse>{
-    let url=`${this.apiUrl}`;
+    let url=`${this.apiUrl}/filter`;
     if(category){
       url+=`?category=${category}`;
     }
