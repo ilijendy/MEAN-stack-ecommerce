@@ -1,0 +1,42 @@
+<header class="navbar">
+  <div class="navbar-container">
+    <a routerLink="/home" class="navbar-logo">
+      <div class="logo-icon"></div>
+      <span class="logo-text">Elevate</span>
+    </a>
+
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <div class="hamburger" [class.open]="isMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </button>
+
+    <nav class="navbar-menu" [class.active]="isMenuOpen">
+      <ul class="nav-links">
+        <li><a routerLink="/home" routerLinkActive="active" (click)="isMenuOpen = false">Browse</a></li>
+
+        <ng-container *ngIf="authService.CurentUser | async as user; else guestLinks">
+          <li><a routerLink="/cart" routerLinkActive="active" (click)="isMenuOpen = false">Cart</a></li>
+          <li *ngIf="user.role === 'admin'"><a routerLink="/admin/dashboard" routerLinkActive="active" (click)="isMenuOpen = false">Dashboard</a></li>
+          
+          <li class="user-action user-profile">
+            <a routerLink="/profile" routerLinkActive="active" (click)="isMenuOpen = false" class="profile-link">
+              <span class="avatar">{{ user.name?.charAt(0) | uppercase }}</span>
+              <span class="username">{{ user.name }}</span>
+            </a>
+          </li>
+          <li class="user-action">
+            <button class="btn btn-logout" (click)="logout()">Logout</button>
+          </li>
+        </ng-container>
+
+        <ng-template #guestLinks>
+          <li class="user-action"><a routerLink="/login" routerLinkActive="active" (click)="isMenuOpen = false" class="nav-link btn-ghost">Log in</a></li>
+          <li class="user-action"><a routerLink="/register" routerLinkActive="active" (click)="isMenuOpen = false" class="nav-link btn-primary">Sign up</a></li>
+        </ng-template>
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,8 +1,27 @@
 <div class="products-container">
 
-  <header class="page-header">
-    <h1>Our Products</h1>
-  </header>
+  <section class="hero-slider" (mouseenter)="stopSlider()" (mouseleave)="startSlider()">
+    <div class="slider-container" [style.transform]="'translateX(' + (-currentSlide * 100) + '%)'">
+      @for(slide of slides; track slide.title) {
+        <div class="slide" [style.backgroundImage]="'url(' + slide.image + ')'">
+          <div class="slide-overlay">
+            <div class="slide-content">
+              <h2>{{ slide.title }}</h2>
+              <p>{{ slide.description }}</p>
+              <button class="btn btn-primary">Shop Now</button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+    <button class="slider-nav prev" (click)="prevSlide()">&#10094;</button>
+    <button class="slider-nav next" (click)="nextSlide()">&#10095;</button>
+    <div class="slider-dots">
+      @for(slide of slides; track slide.title; let i = $index) {
+        <span class="dot" [class.active]="i === currentSlide" (click)="goToSlide(i)"></span>
+      }
+    </div>
+  </section>
 
   <section class="controls-section">
     <input type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchQuery" (input)="searchProducts()">
