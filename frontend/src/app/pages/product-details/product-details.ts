@@ -1,10 +1,10 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { Iproduct } from '../../core/interfaces/iproduct';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ProductService } from '../../core/services/productservice';
-import { CartService } from '../../core/services/cart';
-import { Auth } from '../../core/services/auth';
+import {Component, ChangeDetectorRef } from '@angular/core';
+import {Iproduct } from '../../core/interfaces/iproduct';
+import {ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {CommonModule } from '@angular/common';
+import {ProductService } from '../../core/services/productservice';
+import {CartService } from '../../core/services/cart';
+import {Auth } from '../../core/services/auth';
 
 @Component({
   selector: 'app-product-details',
