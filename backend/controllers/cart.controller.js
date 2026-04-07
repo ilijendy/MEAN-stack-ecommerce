@@ -17,7 +17,7 @@ exports.addToCart = async (req, res) => {
          {
             cart = new Cart({
                 user: req.user.id,
-                items: [{ productId: productId, quantity, price: product.price}]
+                items: [{ product: productId, quantity, price: product.price}]
             })
         }
         else {
@@ -44,7 +44,7 @@ exports.getCart=async(req,res)=>{
         const cart = await Cart.findOne({ user: req.user.id })
         .populate('items.product', 'name price image stock');
         if(!cart){
-            return res.status(404).json({message:"cart not found"});
+            return res.status(200).json({message:"cart",cart: { items: [], totalPrice: 0 },cartTotal: 0});
         }
         const cartTotal=cart.items.reduce((acc,item)=>acc+item.price*item.quantity,0);
         return res.status(200).json({message:"cart",cart,cartTotal});
