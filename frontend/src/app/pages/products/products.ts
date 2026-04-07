@@ -1,11 +1,12 @@
 import { Component, OnChanges, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ProductService } from '../../core/services/productservice';
 import { Iproduct } from '../../core/interfaces/iproduct';
 
 @Component({
   selector: 'app-products',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './products.html',
   styleUrl: './products.css',
 })

@@ -1,1 +1,69 @@
-<p>product-details works!</p>
+<div class="product-details-container">
+  <!-- Top Navigation to fix RouterLink lint -->
+  <div class="top-nav" *ngIf="!loading && !error">
+    <a routerLink="/products" class="back-link">
+      <span class="icon">&larr;</span> Back to Products
+    </a>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading premium experience...</p>
+  </div>
+
+  <div class="error-state" *ngIf="error">
+    <div class="error-icon"></div>
+    <h2>Oops! Something went wrong</h2>
+    <p>{{ error }}</p>
+    <button (click)="ngOnInit()">Try Again</button>
+  </div>
+
+  <div class="product-content" *ngIf="product && !loading && !error">
+    <div class="product-image-section">
+      <div class="image-wrapper">
+        <img [src]="product.image" [alt]="product.name" class="main-image">
+        <div class="stock-badge" [class.low-stock]="product.stock < 5">
+          <span *ngIf="product.stock > 0">In Stock ({{product.stock}})</span>
+          <span *ngIf="product.stock === 0">Out of Stock</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-info-section">
+      <div class="brand-category">{{ product.category | uppercase }}</div>
+      <h1 class="product-title">{{ product.name }}</h1>
+      <div class="product-price">
+        <span class="currency">$</span>{{ product.price }}
+      </div>
+      
+      <p class="product-description">{{ product.description }}</p>
+
+      <div class="product-features" *ngIf="product.features?.length">
+        <h3>Key Features</h3>
+        <ul>
+          <li *ngFor="let feature of product.features">
+            <span class="feature-bullet"></span>
+            {{ feature }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="action-section">
+        <div class="quantity-selector">
+          <button class="qty-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+          <input type="number" class="qty-input" [value]="quantity" readonly>
+          <button class="qty-btn" (click)="increaseQuantity()" [disabled]="quantity >= product.stock">+</button>
+        </div>
+
+        <button class="add-to-cart-btn" (click)="addtoCart()" [disabled]="product.stock === 0">
+          <span class="btn-text">Add to Cart</span>
+          <span class="btn-icon">🛒</span>
+        </button>
+      </div>
+
+      <div class="cart-message" *ngIf="cartMessage" [class.error]="cartMessage !== 'Product added to cart'">
+        {{ cartMessage }}
+      </div>
+    </div>
+  </div>
+</div>

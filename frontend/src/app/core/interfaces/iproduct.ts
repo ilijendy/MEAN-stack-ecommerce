@@ -6,7 +6,7 @@ export interface Iproduct {
   image:string;
   category:'laptop'|'mobile'|'accessory';
   stock:number;
-  features:string[];
+  features?:string[];
   crreatedAt:string;
   updatedAt:string;
 }

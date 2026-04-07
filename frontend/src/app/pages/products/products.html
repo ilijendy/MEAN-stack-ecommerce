@@ -40,7 +40,7 @@
 
   <section class="products-grid">
     @for(product of filterProducts; track product._id) {
-    <div class="product-card">
+    <div class="product-card" [routerLink]="['/product', product._id]">
       <div class="card-image">
         <img [src]="product.image ? product.image : 'https://placehold.co/400x300/f5f5f5/999?text=' + product.name" [alt]="product.name">
       </div>
