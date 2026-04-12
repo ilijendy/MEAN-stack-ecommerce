@@ -1,24 +1,31 @@
-import { Iproduct } from "./iproduct";
-import { Iuser } from "./iuser";
-
-export interface orderItem{
-  product:Iproduct;
-  quantity:number;
-  price:number;
+export interface OrderItem {
+  product: any;
+  quantity: number;
+  price: number;
+  _id?: string;
 }
-export interface Order {
+
+export interface IOrder {
   _id: string;
-  user: Iuser;
-  items: orderItem[];
-  totalPrice: number;
+  user: any;
+  items: OrderItem[];
+  totalAmount: number;
   status: 'pending' | 'processing' | 'delivered' | 'cancelled';
   createdAt: string;
+  updatedAt: string;
 }
+
+export interface OrderStatsResponse {
+  count: number;
+  orders: IOrder[];
+}
+
 export interface OrderResponse {
-  count: number;
-  orders: Order[];
+  message: string;
+  order: IOrder;
 }
+
 export interface OrdersResponse {
-  count: number;
-  orders: Order[];
+  message: string;
+  orders: IOrder[];
 }
