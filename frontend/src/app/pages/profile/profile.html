@@ -1,1 +1,80 @@
-<p>profile works!</p>
+<!-- pages/profile/profile.html -->
+
+<div class="profile-wrapper">
+  <div class="profile-card">
+
+    <!-- Avatar -->
+    <div class="profile-avatar">
+      {{ currentUser?.name | slice:0:1 | uppercase }}
+    </div>
+
+    <h2>{{ currentUser?.name }}</h2>
+    <span class="role-badge" [class.admin]="currentUser?.role === 'admin'">
+      {{ currentUser?.role }}
+    </span>
+
+    <div class="divider"></div>
+
+    <!-- Success Message -->
+    <div class="alert-success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <!-- Error Message -->
+    <div class="alert-error" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          [class.input-error]="f['name'].invalid && f['name'].touched"
+        />
+        <span class="error-text"
+          *ngIf="f['name'].errors?.['required'] && f['name'].touched">
+          Name is required
+        </span>
+        <span class="error-text"
+          *ngIf="f['name'].errors?.['minlength'] && f['name'].touched">
+          Name must be at least 3 characters
+        </span>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          [class.input-error]="f['email'].invalid && f['email'].touched"
+        />
+        <span class="error-text"
+          *ngIf="f['email'].errors?.['required'] && f['email'].touched">
+          Email is required
+        </span>
+        <span class="error-text"
+          *ngIf="f['email'].errors?.['email'] && f['email'].touched">
+          Please enter a valid email
+        </span>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="loading || form.invalid">
+        {{ loading ? 'Saving...' : 'Save Changes' }}
+      </button>
+
+    </form>
+
+  </div>
+</div>
