@@ -13,6 +13,8 @@ import { ManageProducts } from './pages/admin/manage-products/manage-products';
 import { ManageOrders } from './pages/admin/manage-orders/manage-orders';
 import { NotFound } from './pages/not-found/not-found';
 import { MyOrders } from './pages/my-orders/my-orders';
+import { AboutUs } from './pages/about-us/about-us';
+import { ContactUs } from './pages/contact-us/contact-us';
 
 
 export const routes: Routes = [
@@ -25,6 +27,8 @@ export const routes: Routes = [
   {path:'product/:id',component:ProductDetails},
   {path:'login',component:Login},
   {path:'register',component:RegisterComponent},
+  {path:'about',component:AboutUs},
+  {path:'contact',component:ContactUs},
 
   //protected
   {path:'cart',component:Cart,canActivate:[authGuard]},

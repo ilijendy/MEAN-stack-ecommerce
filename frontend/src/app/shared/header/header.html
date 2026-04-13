@@ -16,6 +16,8 @@
     <nav class="navbar-menu" [class.active]="isMenuOpen">
       <ul class="nav-links">
         <li><a routerLink="/home" routerLinkActive="active" (click)="isMenuOpen = false">Home</a></li>
+        <li><a routerLink="/about" routerLinkActive="active" (click)="isMenuOpen = false">About Us</a></li>
+        <li><a routerLink="/contact" routerLinkActive="active" (click)="isMenuOpen = false">Contact</a></li>
 
         <ng-container *ngIf="authService.CurentUser | async as user; else guestLinks">
           <!-- Cart Icon -->
