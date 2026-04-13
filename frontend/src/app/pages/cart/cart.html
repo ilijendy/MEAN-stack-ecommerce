@@ -38,34 +38,36 @@
           <span class="header-action"></span>
         </div>
 
-        <div class="cart-item glass-panel" *ngFor="let item of cart?.items">
-          <div class="item-details">
-            <img [src]="item.product.image ? item.product.image : 'https://placehold.co/100x100/f5f5f5/999?text=' + item.product.name" [alt]="item.product.name" class="item-image">
-            <div class="item-info">
-              <h3>{{ item.product.name }}</h3>
-              <span class="category-badge">{{ item.product.category }}</span>
-              <p class="stock-info" [class.low-stock]="item.product.stock < 5">
-                {{ item.product.stock > 0 ? ('In Stock (' + item.product.stock + ')') : 'Out of Stock' }}
-              </p>
+        <ng-container *ngFor="let item of cart?.items">
+          <div class="cart-item glass-panel" *ngIf="item.product">
+            <div class="item-details">
+              <img [src]="item.product.image ? item.product.image : 'https://placehold.co/100x100/f5f5f5/999?text=' + item.product.name" [alt]="item.product.name" class="item-image">
+              <div class="item-info">
+                <h3>{{ item.product.name }}</h3>
+                <span class="category-badge">{{ item.product.category }}</span>
+                <p class="stock-info" [class.low-stock]="item.product.stock < 5" [class.out-of-stock]="item.product.stock <= 0">
+                  {{ item.product.stock > 0 ? ('In Stock (' + item.product.stock + ')') : 'Out of Stock' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="item-quantity">
+              <button class="qty-btn" (click)="updateQuantity(item.product._id, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
+              <span class="qty-display">{{ item.quantity }}</span>
+              <button class="qty-btn" (click)="updateQuantity(item.product._id, item.quantity + 1)" [disabled]="item.quantity >= item.product.stock">+</button>
+            </div>
+
+            <div class="item-price">
+              <span class="price-val">${{ (item.price || item.product.price) * item.quantity | number:'1.2-2' }}</span>
+            </div>
+
+            <div class="item-action">
+              <button class="remove-btn" (click)="deleteCart(item.product._id)" title="Remove Item">
+                ✕
+              </button>
             </div>
           </div>
-
-          <div class="item-quantity">
-            <button class="qty-btn" (click)="updateQuantity(item.product._id, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
-            <span class="qty-display">{{ item.quantity }}</span>
-            <button class="qty-btn" (click)="updateQuantity(item.product._id, item.quantity + 1)" [disabled]="item.quantity >= item.product.stock">+</button>
-          </div>
-
-          <div class="item-price">
-            <span class="price-val">${{ item.product.price * item.quantity | number:'1.2-2' }}</span>
-          </div>
-
-          <div class="item-action">
-            <button class="remove-btn" (click)="deleteCart(item.product._id)" title="Remove Item">
-              ✕
-            </button>
-          </div>
-        </div>
+        </ng-container>
       </div>
 
       <!-- Order Summary Sticky Panel -->

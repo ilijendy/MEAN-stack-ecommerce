@@ -113,3 +113,29 @@ exports.updateOrderStatus=async(req,res)=>{
     res.status(500).json({message:err.message});
   }
 };
+
+exports.cancelOrder = async (req, res) => {
+    try {
+        const order = await OrderModel.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ message: "order not found" });
+        }
+        
+        // Ensure user owns the order or is admin
+        if (req.user.id !== order.user.toString() && req.user.role !== 'admin') {
+            return res.status(403).json({ message: "forbidden" });
+        }
+        
+        // Only pending orders can be cancelled by user
+        if (order.status !== 'pending') {
+            return res.status(400).json({ message: "only pending orders can be cancelled" });
+        }
+        
+        order.status = 'cancelled';
+        await order.save();
+        
+        return res.status(200).json({ message: "order cancelled successfully", order });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

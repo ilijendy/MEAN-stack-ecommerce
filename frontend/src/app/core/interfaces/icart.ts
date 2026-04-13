@@ -2,6 +2,7 @@ import { Iproduct } from "./iproduct";
   export interface IcartItem{
     product:Iproduct;
     quantity:number;
+    price?:number;
   }
   export interface Icart {
     _id: string;

@@ -19,6 +19,21 @@
   margin: 0 auto;
   padding: 0 1.5rem;
   height: 64px;
+  position: relative;
+}
+
+.navbar-left {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.navbar-right {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* Logo */
@@ -83,9 +98,12 @@
 }
 
 /* Nav */
-.navbar-menu {
+.navbar-center {
   display: flex;
   align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-links {
@@ -314,7 +332,8 @@
     display: block;
   }
 
-  .navbar-menu {
+  /* Nav */
+  .navbar-center {
     position: absolute;
     top: 100%;
     left: 0;
@@ -330,7 +349,7 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .navbar-menu.active {
+  .navbar-center.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);

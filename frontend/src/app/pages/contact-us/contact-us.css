@@ -1,16 +1,16 @@
 :host {
   --primary: #4f46e5;
   --primary-hover: #4338ca;
-  --bg-dark: #0f172a;
-  --bg-card: rgba(30, 41, 59, 0.7);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: rgba(255, 255, 255, 0.1);
-  --input-bg: rgba(15, 23, 42, 0.6);
-  --input-focus: rgba(79, 70, 229, 0.5);
+  --bg-main: #ffffff;
+  --bg-card: #f9fafb;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border: rgba(0, 0, 0, 0.1);
+  --input-bg: #ffffff;
+  --input-focus: rgba(79, 70, 229, 0.2);
   
   display: block;
-  background-color: var(--bg-dark);
+  background-color: var(--bg-main);
   color: var(--text-main);
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -32,7 +32,7 @@
   font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  background: linear-gradient(135deg, #111827 0%, #4f46e5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -71,7 +71,7 @@
 }
 
 .info-card:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .icon-circle {
@@ -91,7 +91,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #fff;
+  color: var(--text-main);
 }
 
 .info-content p {
@@ -108,7 +108,7 @@
 }
 
 .info-content a:hover {
-  color: #a5b4fc;
+  color: var(--primary-hover);
 }
 
 /* Form Styles */
@@ -118,12 +118,10 @@
 
 .glass-form-card {
   background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 3rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
 }
 
 .glass-form-card h2 {
@@ -167,14 +165,14 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0.875rem 1rem;
-  color: white;
+  color: var(--text-main);
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.2s ease;
 }
 
 .form-control::placeholder {
-  color: rgba(148, 163, 184, 0.5);
+  color: #9ca3af;
 }
 
 .form-control:focus {
@@ -204,7 +202,7 @@ textarea.form-control {
 .btn-submit:hover {
   background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3);
 }
 
 .btn-submit:active {

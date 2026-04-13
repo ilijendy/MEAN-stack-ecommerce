@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OrderService } from '../../core/services/order';
 import { IOrder } from '../../core/interfaces/iorder';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-my-orders',
@@ -18,7 +19,10 @@ export class MyOrders implements OnInit {
   loading = true;
   error = '';
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.fetchOrders();
@@ -48,4 +52,22 @@ export class MyOrders implements OnInit {
   getStatusClass(status: string): string {
     return status;
   }
+
+  cancelOrder(id: string) {
+    this.alertService.confirm('Cancel Order?', 'Are you sure you want to cancel this order? This action cannot be undone.', 'Yes, cancel it!').then((result) => {
+      if (result.isConfirmed) {
+        this.orderService.cancelOrder(id).subscribe({
+          next: () => {
+            this.alertService.success('Cancelled!', 'Your order has been successfully cancelled.');
+            this.fetchOrders();
+          },
+          error: (err: any) => {
+            this.alertService.error('Error!', err.error?.message || 'Failed to cancel order.');
+            this.cdr.markForCheck();
+          }
+        });
+      }
+    });
+  }
 }
+

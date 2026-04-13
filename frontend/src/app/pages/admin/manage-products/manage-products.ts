@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../core/services/productservice';
 import { Iproduct } from '../../../core/interfaces/iproduct';
+import { AlertService } from '../../../core/services/alert.service';
 
 @Component({
   selector: 'app-manage-products',
@@ -52,7 +53,10 @@ export class ManageProducts implements OnInit {
     this.cdr.markForCheck();
   }
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.fetchProducts();
@@ -166,18 +170,22 @@ export class ManageProducts implements OnInit {
   }
 
   deleteProduct(id: string) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-
-    this.productService.deleteProduct(id).subscribe({
-      next: () => {
-        this.successMessage = 'Product deleted!';
-        this.fetchProducts();
-        this.cdr.markForCheck();
-        this.clearMessages();
-      },
-      error: (err: any) => {
-        this.error = err.error?.message || 'Failed to delete product';
-        this.cdr.markForCheck();
+    this.alertService.confirm('Delete Product?', 'Are you sure you want to delete this product? This action cannot be undone.', 'Yes, delete it!').then((result) => {
+      if (result.isConfirmed) {
+        this.productService.deleteProduct(id).subscribe({
+          next: () => {
+            this.alertService.success('Deleted!', 'Product has been deleted.');
+            this.successMessage = 'Product deleted!';
+            this.fetchProducts();
+            this.cdr.markForCheck();
+            this.clearMessages();
+          },
+          error: (err: any) => {
+            this.alertService.error('Error!', err.error?.message || 'Failed to delete product');
+            this.error = err.error?.message || 'Failed to delete product';
+            this.cdr.markForCheck();
+          }
+        });
       }
     });
   }
