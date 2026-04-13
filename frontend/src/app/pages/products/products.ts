@@ -1,12 +1,13 @@
-import { Component, OnChanges, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/productservice';
 import { Iproduct } from '../../core/interfaces/iproduct';
 
 @Component({
   selector: 'app-products',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './products.html',
   styleUrl: './products.css',
 })
@@ -24,6 +25,27 @@ export class Products implements OnInit, OnDestroy {
     { label: 'Accessories', value: 'accessory' }]
   error: string = '';
   loading: boolean = false;
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 8;
+  get totalPages(): number {
+    return Math.ceil(this.filterProducts.length / this.itemsPerPage);
+  }
+  get paginatedProducts(): Iproduct[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filterProducts.slice(start, start + this.itemsPerPage);
+  }
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.cdr.markForCheck();
+    window.scrollTo({ top: 400, behavior: 'smooth' });
+  }
 
   // Slider state
   currentSlide = 0;
@@ -52,6 +74,7 @@ export class Products implements OnInit, OnDestroy {
         this.products = res.data;
         this.filterProducts = res.data;
         this.loading = false;
+        this.currentPage = 1;
         this.cdr.markForCheck();
       },
       error: (err) => {
@@ -91,11 +114,12 @@ export class Products implements OnInit, OnDestroy {
   goToSlide(index: number) {
     this.currentSlide = index;
     this.stopSlider();
-    this.startSlider(); // reset interval
+    this.startSlider();
   }
 
   filterByCategory() {
     this.searchQuery = '';
+    this.currentPage = 1;
     if (this.selectedCategory === "all") {
       this.filterProducts = this.products;
     }
@@ -105,6 +129,7 @@ export class Products implements OnInit, OnDestroy {
         next: (res) => {
           this.filterProducts = res.data;
           this.loading = false;
+          this.currentPage = 1;
           this.cdr.markForCheck();
         },
         error: (err) => {
@@ -116,8 +141,10 @@ export class Products implements OnInit, OnDestroy {
       });
     }
   }
+
   searchProducts() {
     this.selectedCategory = 'all';
+    this.currentPage = 1;
     if (this.searchQuery.trim() === '') {
       this.filterProducts = this.products;
     }
@@ -127,6 +154,7 @@ export class Products implements OnInit, OnDestroy {
         next: (res) => {
           this.filterProducts = res.data;
           this.loading = false;
+          this.currentPage = 1;
           this.cdr.markForCheck();
         },
         error: (err) => {
@@ -138,8 +166,4 @@ export class Products implements OnInit, OnDestroy {
       })
     }
   }
-
-
-
-
 }

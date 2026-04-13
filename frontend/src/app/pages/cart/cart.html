@@ -86,7 +86,9 @@
             <span class="total-price">${{ cartTotal | number:'1.2-2' }}</span>
           </div>
 
-          <button class="btn-checkout">Proceed to Checkout <span class="arrow">→</span></button>
+          <button class="btn-checkout" (click)="checkout()" [disabled]="checkingOut">
+            {{ checkingOut ? 'Processing...' : 'Proceed to Checkout' }} <span class="arrow" *ngIf="!checkingOut">→</span>
+          </button>
           
           <button class="btn-clear" (click)="clearCart()">Clear Cart</button>
         </div>

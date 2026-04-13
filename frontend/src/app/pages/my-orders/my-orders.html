@@ -1,0 +1,49 @@
+<div class="orders-page">
+  <h1>My Orders</h1>
+  <p class="subtitle">Track your order history and status</p>
+
+  <!-- Loading -->
+  <div class="loader-container" *ngIf="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Error -->
+  <div class="alert-error" *ngIf="error">{{ error }}</div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading && orders.length === 0 && !error">
+    <div class="empty-icon">🛍️</div>
+    <h3>No Orders Yet</h3>
+    <p>You haven't placed any orders. Start shopping!</p>
+    <a routerLink="/home" class="btn-shop">Browse Products</a>
+  </div>
+
+  <!-- Orders List -->
+  <div class="orders-list" *ngIf="!loading && orders.length > 0">
+    <div class="order-card" *ngFor="let order of orders">
+      <div class="order-header">
+        <div class="order-meta">
+          <span class="order-id">#{{ order._id | slice:-8 | uppercase }}</span>
+          <span class="order-date">{{ order.createdAt | date:'mediumDate' }}</span>
+        </div>
+        <span class="status-badge" [ngClass]="order.status">{{ order.status }}</span>
+      </div>
+
+      <div class="order-items">
+        <div class="order-item" *ngFor="let item of order.items">
+          <img [src]="item.product?.image || 'https://placehold.co/60x60/f5f5f5/999?text=?'" [alt]="item.product?.name" class="item-thumb">
+          <div class="item-info">
+            <strong>{{ item.product?.name || 'Product' }}</strong>
+            <span>Qty: {{ item.quantity }} × ${{ item.price | number:'1.2-2' }}</span>
+          </div>
+          <span class="item-subtotal">${{ item.price * item.quantity | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <span class="total-label">Total</span>
+        <span class="total-amount">${{ order.totalAmount | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

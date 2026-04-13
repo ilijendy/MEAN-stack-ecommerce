@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CartService } from '../../core/services/cart';
+import { OrderService } from '../../core/services/order';
 import { Icart } from '../../core/interfaces/icart';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -16,9 +17,12 @@ export class Cart implements OnInit {
   cartTotal: number = 0;
   loading: boolean = false;
   error: string | null = null;
+  checkingOut = false;
 
   constructor(
     private cartService: CartService,
+    private orderService: OrderService,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -81,6 +85,24 @@ export class Cart implements OnInit {
       error: (err) => {
         this.error = err.message || 'Failed to clear cart';
         this.loading = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  checkout() {
+    this.checkingOut = true;
+    this.error = null;
+    this.cdr.markForCheck();
+
+    this.orderService.createOrder().subscribe({
+      next: () => {
+        this.checkingOut = false;
+        this.router.navigate(['/orders']);
+      },
+      error: (err: any) => {
+        this.checkingOut = false;
+        this.error = err.error?.message || 'Checkout failed. Please try again.';
         this.cdr.markForCheck();
       }
     });

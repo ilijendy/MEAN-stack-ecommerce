@@ -12,6 +12,7 @@ import { adminGuard } from './core/guards/admin-guard';
 import { ManageProducts } from './pages/admin/manage-products/manage-products';
 import { ManageOrders } from './pages/admin/manage-orders/manage-orders';
 import { NotFound } from './pages/not-found/not-found';
+import { MyOrders } from './pages/my-orders/my-orders';
 
 
 export const routes: Routes = [
@@ -27,6 +28,7 @@ export const routes: Routes = [
 
   //protected
   {path:'cart',component:Cart,canActivate:[authGuard]},
+  {path:'orders',component:MyOrders,canActivate:[authGuard]},
   {path:'profile',component:Profile,canActivate:[authGuard]},
 
   //admin

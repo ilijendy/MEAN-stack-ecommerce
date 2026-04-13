@@ -1,6 +1,6 @@
 // pages/admin/dashboard/dashboard.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../core/services/productservice';
@@ -13,8 +13,8 @@ import { OrderService } from '../../../core/services/order';
   styleUrl: './dashboard.css'
 })
 export class Dashboard implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
 
-  // الإحصائيات
   stats = {
     totalProducts: 0,
     totalOrders: 0,
@@ -23,7 +23,7 @@ export class Dashboard implements OnInit {
   };
 
   recentOrders: any[] = [];
-  loading: boolean = false;
+  loading = true;
 
   constructor(
     private productService: ProductService,
@@ -39,24 +39,29 @@ export class Dashboard implements OnInit {
 
     this.productService.getAllProduct().subscribe({
       next: (res: any) => {
-        this.stats.totalProducts = res.count;
+        this.stats.totalProducts = Array.isArray(res.data) ? res.data.length : (res.count || 0);
+        this.cdr.markForCheck();
       }
     });
 
     this.orderService.getAllOrders().subscribe({
       next: (res) => {
-        this.stats.totalOrders = res.count;
+        this.stats.totalOrders = res.count || res.orders?.length || 0;
         this.stats.pendingOrders = res.orders.filter(
-          o => o.status === 'pending'
+          (o: any) => o.status === 'pending'
         ).length;
 
         this.stats.totalRevenue = res.orders.reduce(
-          (acc, o) => acc + o.totalAmount, 0
+          (acc: number, o: any) => acc + o.totalAmount, 0
         );
 
         this.recentOrders = res.orders.slice(0, 5);
-
         this.loading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }

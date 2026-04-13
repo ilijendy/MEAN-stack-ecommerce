@@ -33,7 +33,9 @@ export class CartService {
 
   
   addToCart(productId: string, quantity: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/addToCart`, { productId, quantity });
+    return this.http.post(`${this.apiUrl}/addToCart`, { productId, quantity }).pipe(
+      tap(() => this.getCart().subscribe())
+    );
   }
   clearCart(): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/clearCart`).pipe(

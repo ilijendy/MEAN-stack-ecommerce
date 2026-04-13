@@ -32,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of orders" [class.updating]="updatingStatusFor === order._id">
+          <tr *ngFor="let order of paginatedOrders" [class.updating]="updatingStatusFor === order._id">
             <td class="id-cell">#{{ order._id | slice:-6 | uppercase }}</td>
             <td>
               <div class="customer-info" *ngIf="order.user">
@@ -66,4 +66,21 @@
       </table>
     </div>
   </div>
+
+  <!-- Pagination -->
+  <nav class="pagination" *ngIf="totalPages > 1">
+    <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button 
+      *ngFor="let page of pageNumbers" 
+      class="page-btn" 
+      [class.active]="page === currentPage"
+      (click)="goToPage(page)">
+      {{ page }}
+    </button>
+    <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </nav>
 </div>

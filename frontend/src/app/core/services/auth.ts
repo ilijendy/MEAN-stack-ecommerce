@@ -44,11 +44,15 @@ export class Auth {
     this.CurrentUserSubject.next(null);
   }
 
-  updateProfile(data: UpdateProfile): Observable<{ message: string; user: Iuser }> {
-    return this.http.put<{ message: string; user: Iuser }>(`${this.apiUrl}/auth/profile`, data).pipe(
-      tap((res: any) => {
+  getProfile(): Observable<{ message: string; data: Iuser }> {
+    return this.http.get<{ message: string; data: Iuser }>(`${this.apiUrl}/user/profile`);
+  }
+
+  updateProfile(data: UpdateProfile): Observable<{ message: string; data: Iuser }> {
+    return this.http.put<{ message: string; data: Iuser }>(`${this.apiUrl}/user/profile`, data).pipe(
+      tap((res) => {
         const user = typeof localStorage !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '{}') : {};
-        const updatedUser = { ...user, ...res.user };
+        const updatedUser = { ...user, ...res.data };
         if (typeof localStorage !== 'undefined') {
           localStorage.setItem('user', JSON.stringify(updatedUser));
         }
