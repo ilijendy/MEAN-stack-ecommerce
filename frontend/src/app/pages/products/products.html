@@ -3,34 +3,36 @@
   <section class="hero-slider" (mouseenter)="stopSlider()" (mouseleave)="startSlider()">
     <div class="slider-container" [style.transform]="'translateX(' + (-currentSlide * 100) + '%)'">
       @for(slide of slides; track slide.title) {
-        <div class="slide" [style.backgroundImage]="'url(' + slide.image + ')'">
-          <div class="slide-overlay">
-            <div class="slide-content">
-              <h2>{{ slide.title }}</h2>
-              <p>{{ slide.description }}</p>
-              <button class="btn btn-primary">Shop Now</button>
-            </div>
+      <div class="slide" [style.backgroundImage]="'url(' + slide.image + ')'">
+        <div class="slide-overlay">
+          <div class="slide-content">
+            <h2>{{ slide.title }}</h2>
+            <p>{{ slide.description }}</p>
+            <button class="btn btn-primary">Shop Now</button>
           </div>
         </div>
+      </div>
       }
     </div>
     <button class="slider-nav prev" (click)="prevSlide()">&#10094;</button>
     <button class="slider-nav next" (click)="nextSlide()">&#10095;</button>
     <div class="slider-dots">
       @for(slide of slides; track slide.title; let i = $index) {
-        <span class="dot" [class.active]="i === currentSlide" (click)="goToSlide(i)"></span>
+      <span class="dot" [class.active]="i === currentSlide" (click)="goToSlide(i)"></span>
       }
     </div>
   </section>
 
   <section class="controls-section">
     <div class="search-box-wrapper">
-      <input type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchQuery" (input)="searchProducts()" (focus)="onSearchFocus()" (blur)="onSearchBlur()">
-      
+      <input type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchQuery"
+        (input)="searchProducts()" (focus)="onSearchFocus()" (blur)="onSearchBlur()">
+
       <!-- Typeahead Dropdown -->
       <ul class="typeahead-dropdown" *ngIf="showTypeahead && typeaheadResults.length > 0">
         <li *ngFor="let result of typeaheadResults" (mousedown)="$event.preventDefault(); selectTypeahead(result)">
-          <img [src]="result.image || 'https://placehold.co/24x24/f5f5f5/999?text=?'" [alt]="result.name" class="typeahead-img">
+          <img [src]="result.image || 'https://placehold.co/24x24/f5f5f5/999?text=?'" [alt]="result.name"
+            class="typeahead-img">
           <span class="typeahead-name">{{ result.name }}</span>
           <span class="typeahead-cat">{{ result.category }}</span>
         </li>
@@ -38,7 +40,7 @@
     </div>
     <select class="category-select" [(ngModel)]="selectedCategory" (change)="filterByCategory()">
       @for(cat of categoreies; track cat.value) {
-        <option [value]="cat.value">{{ cat.label }}</option>
+      <option [value]="cat.value">{{ cat.label }}</option>
       }
     </select>
   </section>
@@ -53,7 +55,8 @@
     @for(product of paginatedProducts; track product._id) {
     <div class="product-card" [routerLink]="['/product', product._id]">
       <div class="card-image">
-        <img [src]="product.image ? product.image : 'https://placehold.co/400x300/f5f5f5/999?text=' + product.name" [alt]="product.name">
+        <img [src]="product.image ? product.image : 'https://placehold.co/400x300/f5f5f5/999?text=' + product.name"
+          [alt]="product.name">
       </div>
       <div class="card-body">
         <span class="category-badge">{{ product.category }}</span>
@@ -65,24 +68,25 @@
       </div>
     </div>
     } @empty {
-      <p style="grid-column: 1 / -1; text-align: center; color: #999; padding: 40px 0;">No products found.</p>
+    <p style="grid-column: 1 / -1; text-align: center; color: #999; padding: 40px 0;">No products found.</p>
     }
   </section>
 
   <!-- Pagination -->
   <nav class="pagination" *ngIf="totalPages > 1">
     <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
     </button>
-    <button 
-      *ngFor="let page of pageNumbers" 
-      class="page-btn" 
-      [class.active]="page === currentPage"
+    <button *ngFor="let page of pageNumbers" class="page-btn" [class.active]="page === currentPage"
       (click)="goToPage(page)">
       {{ page }}
     </button>
     <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
     </button>
   </nav>
 

@@ -183,7 +183,7 @@ export class Products implements OnInit, OnDestroy {
           this.filterProducts = res.data;
           this.typeaheadResults = res.data.slice(0, 5);
           if (this.searchQuery.trim().length > 0) {
-             this.showTypeahead = true;
+            this.showTypeahead = true;
           }
           this.loading = false;
           this.currentPage = 1;

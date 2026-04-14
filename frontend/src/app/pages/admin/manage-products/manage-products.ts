@@ -76,7 +76,7 @@ export class ManageProducts implements OnInit {
   constructor(
     private productService: ProductService,
     private alertService: AlertService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.fetchProducts();
@@ -118,9 +118,9 @@ export class ManageProducts implements OnInit {
   }
 
   onSearchFocus() {
-    if(this.searchQuery.trim().length > 0) {
-       this.showTypeahead = true;
-       this.cdr.markForCheck();
+    if (this.searchQuery.trim().length > 0) {
+      this.showTypeahead = true;
+      this.cdr.markForCheck();
     }
   }
 

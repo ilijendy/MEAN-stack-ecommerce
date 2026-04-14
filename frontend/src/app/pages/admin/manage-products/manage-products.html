@@ -2,7 +2,10 @@
   <div class="header-actions">
     <h2>Manage Products</h2>
     <button class="btn-add" (click)="openAddForm()">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
       Add Product
     </button>
   </div>
@@ -37,7 +40,8 @@
 
       <div class="form-group">
         <label>Description</label>
-        <textarea [(ngModel)]="formData.description" name="description" rows="3" placeholder="Product description..."></textarea>
+        <textarea [(ngModel)]="formData.description" name="description" rows="3"
+          placeholder="Product description..."></textarea>
       </div>
 
       <div class="form-row">
@@ -56,13 +60,18 @@
         <div class="upload-area">
           <input type="file" accept="image/*" (change)="onFileSelected($event)" id="imageUpload" class="file-input">
           <label for="imageUpload" class="upload-label">
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
             <span>Choose image or drag here</span>
           </label>
           <img *ngIf="imagePreview" [src]="imagePreview" class="image-preview" alt="Preview">
           <img *ngIf="!imagePreview && formData.image" [src]="formData.image" class="image-preview" alt="Current">
         </div>
-        <input type="text" [(ngModel)]="formData.image" name="image" placeholder="Or paste image URL..." class="url-fallback">
+        <input type="text" [(ngModel)]="formData.image" name="image" placeholder="Or paste image URL..."
+          class="url-fallback">
       </div>
 
       <div class="form-actions">
@@ -77,13 +86,18 @@
     <!-- Toolbar -->
     <div class="datatable-toolbar">
       <div class="search-box">
-        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" placeholder="Search products..." [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()" (focus)="onSearchFocus()" (blur)="onSearchBlur()" (keyup)="onSearchFocus()" id="productSearch">
-        
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Search products..." [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()"
+          (focus)="onSearchFocus()" (blur)="onSearchBlur()" (keyup)="onSearchFocus()" id="productSearch">
+
         <!-- Typeahead Dropdown -->
         <ul class="typeahead-dropdown" *ngIf="showTypeahead && typeaheadResults.length > 0">
           <li *ngFor="let result of typeaheadResults" (mousedown)="$event.preventDefault(); selectTypeahead(result)">
-            <img [src]="result.image || 'https://placehold.co/24x24/f5f5f5/999?text=?'" [alt]="result.name" class="typeahead-img">
+            <img [src]="result.image || 'https://placehold.co/24x24/f5f5f5/999?text=?'" [alt]="result.name"
+              class="typeahead-img">
             <span class="typeahead-name">{{ result.name }}</span>
             <span class="typeahead-cat">{{ result.category }}</span>
           </li>
@@ -109,19 +123,23 @@
           <tr>
             <th class="sortable" (click)="sortBy('name')">
               Product
-              <span class="sort-icon" [class.asc]="sortField === 'name' && sortDir === 'asc'" [class.desc]="sortField === 'name' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === 'name' && sortDir === 'asc'"
+                [class.desc]="sortField === 'name' && sortDir === 'desc'">⇅</span>
             </th>
             <th class="sortable" (click)="sortBy('category')">
               Category
-              <span class="sort-icon" [class.asc]="sortField === 'category' && sortDir === 'asc'" [class.desc]="sortField === 'category' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === 'category' && sortDir === 'asc'"
+                [class.desc]="sortField === 'category' && sortDir === 'desc'">⇅</span>
             </th>
             <th class="sortable" (click)="sortBy('price')">
               Price
-              <span class="sort-icon" [class.asc]="sortField === 'price' && sortDir === 'asc'" [class.desc]="sortField === 'price' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === 'price' && sortDir === 'asc'"
+                [class.desc]="sortField === 'price' && sortDir === 'desc'">⇅</span>
             </th>
             <th class="sortable" (click)="sortBy('stock')">
               Stock
-              <span class="sort-icon" [class.asc]="sortField === 'stock' && sortDir === 'asc'" [class.desc]="sortField === 'stock' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === 'stock' && sortDir === 'asc'"
+                [class.desc]="sortField === 'stock' && sortDir === 'desc'">⇅</span>
             </th>
             <th>Actions</th>
           </tr>
@@ -130,25 +148,33 @@
           <tr *ngFor="let product of paginatedProducts" class="table-row">
             <td>
               <div class="product-info">
-                <img [src]="product.image || 'https://placehold.co/48x48/f5f5f5/999?text=?'" [alt]="product.name" class="product-thumb">
+                <img [src]="product.image || 'https://placehold.co/48x48/f5f5f5/999?text=?'" [alt]="product.name"
+                  class="product-thumb">
                 <div>
                   <strong>{{ product.name }}</strong>
-                  <span class="desc-preview">{{ product.description | slice:0:40 }}{{ product.description.length > 40 ? '...' : '' }}</span>
+                  <span class="desc-preview">{{ product.description | slice:0:40 }}{{ product.description.length > 40 ?
+                    '...' : '' }}</span>
                 </div>
               </div>
             </td>
             <td><span class="category-pill">{{ product.category }}</span></td>
             <td class="price-cell">${{ product.price | number:'1.2-2' }}</td>
             <td>
-              <span class="stock-indicator" [class.low]="product.stock < 5" [class.out]="product.stock === 0">{{ product.stock }}</span>
+              <span class="stock-indicator" [class.low]="product.stock < 5" [class.out]="product.stock === 0">{{
+                product.stock }}</span>
             </td>
             <td>
               <div class="action-btns">
                 <button class="btn-edit" (click)="openEditForm(product)" title="Edit">
-                  <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                  <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                  </svg>
                 </button>
                 <button class="btn-delete" (click)="deleteProduct(product._id)" title="Delete">
-                  <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  </svg>
                 </button>
               </div>
             </td>
@@ -167,13 +193,18 @@
       <div class="page-info">Page {{ currentPage }} of {{ totalPages }}</div>
       <nav class="dt-pagination">
         <button class="dt-page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
         </button>
-        <button *ngFor="let page of pageNumbers" class="dt-page-btn" [class.active]="page === currentPage" (click)="goToPage(page)">
+        <button *ngFor="let page of pageNumbers" class="dt-page-btn" [class.active]="page === currentPage"
+          (click)="goToPage(page)">
           {{ page }}
         </button>
         <button class="dt-page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
       </nav>
     </div>

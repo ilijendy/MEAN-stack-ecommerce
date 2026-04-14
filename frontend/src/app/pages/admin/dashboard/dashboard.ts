@@ -97,7 +97,7 @@ export class Dashboard implements OnInit {
   constructor(
     private productService: ProductService,
     private orderService: OrderService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadStats();
@@ -156,8 +156,8 @@ export class Dashboard implements OnInit {
 
   onProductSearchFocus() {
     if (this.productSearch.trim().length > 0) {
-       this.showProductTypeahead = true;
-       this.cdr.markForCheck();
+      this.showProductTypeahead = true;
+      this.cdr.markForCheck();
     }
   }
 
@@ -223,8 +223,8 @@ export class Dashboard implements OnInit {
 
   onOrderSearchFocus() {
     if (this.orderSearch.trim().length > 0) {
-       this.showOrderTypeahead = true;
-       this.cdr.markForCheck();
+      this.showOrderTypeahead = true;
+      this.cdr.markForCheck();
     }
   }
 
@@ -237,9 +237,9 @@ export class Dashboard implements OnInit {
 
   selectOrderTypeahead(order: IOrder) {
     if (order && order._id) {
-       this.orderSearch = order._id.slice(-6).toUpperCase();
-       this.showOrderTypeahead = false;
-       this.filterOrders();
+      this.orderSearch = order._id.slice(-6).toUpperCase();
+      this.showOrderTypeahead = false;
+      this.filterOrders();
     }
   }
 

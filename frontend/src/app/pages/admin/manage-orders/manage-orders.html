@@ -23,9 +23,14 @@
     <!-- Toolbar -->
     <div class="datatable-toolbar">
       <div class="search-box">
-        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" placeholder="Search by ID, customer..." [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()" (focus)="onSearchFocus()" (blur)="onSearchBlur()" (keyup)="onSearchFocus()" id="orderSearch">
-        
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Search by ID, customer..." [(ngModel)]="searchQuery"
+          (ngModelChange)="applyFilters()" (focus)="onSearchFocus()" (blur)="onSearchBlur()" (keyup)="onSearchFocus()"
+          id="orderSearch">
+
         <!-- Typeahead Dropdown -->
         <ul class="typeahead-dropdown" *ngIf="showTypeahead && typeaheadResults.length > 0">
           <li *ngFor="let result of typeaheadResults" (mousedown)="$event.preventDefault(); selectTypeahead(result)">
@@ -57,26 +62,31 @@
           <tr>
             <th class="sortable" (click)="sortBy('_id')">
               Order ID
-              <span class="sort-icon" [class.asc]="sortField === '_id' && sortDir === 'asc'" [class.desc]="sortField === '_id' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === '_id' && sortDir === 'asc'"
+                [class.desc]="sortField === '_id' && sortDir === 'desc'">⇅</span>
             </th>
             <th class="sortable" (click)="sortBy('user')">
               Customer
-              <span class="sort-icon" [class.asc]="sortField === 'user' && sortDir === 'asc'" [class.desc]="sortField === 'user' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === 'user' && sortDir === 'asc'"
+                [class.desc]="sortField === 'user' && sortDir === 'desc'">⇅</span>
             </th>
             <th class="sortable" (click)="sortBy('createdAt')">
               Date
-              <span class="sort-icon" [class.asc]="sortField === 'createdAt' && sortDir === 'asc'" [class.desc]="sortField === 'createdAt' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === 'createdAt' && sortDir === 'asc'"
+                [class.desc]="sortField === 'createdAt' && sortDir === 'desc'">⇅</span>
             </th>
             <th class="sortable" (click)="sortBy('totalAmount')">
               Amount
-              <span class="sort-icon" [class.asc]="sortField === 'totalAmount' && sortDir === 'asc'" [class.desc]="sortField === 'totalAmount' && sortDir === 'desc'">⇅</span>
+              <span class="sort-icon" [class.asc]="sortField === 'totalAmount' && sortDir === 'asc'"
+                [class.desc]="sortField === 'totalAmount' && sortDir === 'desc'">⇅</span>
             </th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of paginatedOrders" class="table-row" [class.updating]="updatingStatusFor === order._id">
+          <tr *ngFor="let order of paginatedOrders" class="table-row"
+            [class.updating]="updatingStatusFor === order._id">
             <td class="id-cell">#{{ order._id | slice:-6 | uppercase }}</td>
             <td>
               <div class="customer-info" *ngIf="order.user">
@@ -95,10 +105,7 @@
               </span>
             </td>
             <td>
-              <select
-                class="status-dropdown"
-                [value]="order.status"
-                (change)="changeStatus(order._id, $event)"
+              <select class="status-dropdown" [value]="order.status" (change)="changeStatus(order._id, $event)"
                 [disabled]="updatingStatusFor === order._id">
                 <option *ngFor="let option of statusOptions" [value]="option">
                   {{ option | titlecase }}
@@ -120,13 +127,18 @@
       <div class="page-info">Page {{ currentPage }} of {{ totalPages }}</div>
       <nav class="dt-pagination">
         <button class="dt-page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
         </button>
-        <button *ngFor="let page of pageNumbers" class="dt-page-btn" [class.active]="page === currentPage" (click)="goToPage(page)">
+        <button *ngFor="let page of pageNumbers" class="dt-page-btn" [class.active]="page === currentPage"
+          (click)="goToPage(page)">
           {{ page }}
         </button>
         <button class="dt-page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
       </nav>
     </div>

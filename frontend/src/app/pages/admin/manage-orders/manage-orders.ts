@@ -59,7 +59,7 @@ export class ManageOrders implements OnInit {
     this.cdr.markForCheck();
   }
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService) { }
 
   ngOnInit() {
     this.fetchOrders();
@@ -101,9 +101,9 @@ export class ManageOrders implements OnInit {
   }
 
   onSearchFocus() {
-    if(this.searchQuery.trim().length > 0) {
-       this.showTypeahead = true;
-       this.cdr.markForCheck();
+    if (this.searchQuery.trim().length > 0) {
+      this.showTypeahead = true;
+      this.cdr.markForCheck();
     }
   }
 
@@ -116,9 +116,9 @@ export class ManageOrders implements OnInit {
 
   selectTypeahead(order: IOrder) {
     if (order && order._id) {
-       this.searchQuery = order._id.slice(-6).toUpperCase();
-       this.showTypeahead = false;
-       this.applyFilters();
+      this.searchQuery = order._id.slice(-6).toUpperCase();
+      this.showTypeahead = false;
+      this.applyFilters();
     }
   }
 
@@ -154,7 +154,7 @@ export class ManageOrders implements OnInit {
   changeStatus(orderId: string, event: Event) {
     const target = event.target as HTMLSelectElement;
     const newStatus = target.value;
-    
+
     this.updatingStatusFor = orderId;
     this.orderService.updateOrderStatus(orderId, newStatus).subscribe({
       next: (res) => {
