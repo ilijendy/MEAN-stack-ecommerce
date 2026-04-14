@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../core/services/productservice';
 import { OrderService } from '../../../core/services/order';
 import { Iproduct } from '../../../core/interfaces/iproduct';
+import { IOrder } from '../../../core/interfaces/iorder';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,6 +33,8 @@ export class Dashboard implements OnInit {
   filteredProducts: Iproduct[] = [];
   productSearch = '';
   productCategoryFilter = '';
+  showProductTypeahead = false;
+  productTypeaheadResults: Iproduct[] = [];
   productSortField = '';
   productSortDir: 'asc' | 'desc' = 'asc';
   productPage = 1;
@@ -59,10 +62,12 @@ export class Dashboard implements OnInit {
   }
 
   // --- Orders Datatable ---
-  allOrders: any[] = [];
-  filteredOrders: any[] = [];
+  allOrders: IOrder[] = [];
+  filteredOrders: IOrder[] = [];
   orderSearch = '';
   orderStatusFilter = '';
+  showOrderTypeahead = false;
+  orderTypeaheadResults: IOrder[] = [];
   orderSortField = '';
   orderSortDir: 'asc' | 'desc' = 'asc';
   orderPage = 1;
@@ -133,19 +138,40 @@ export class Dashboard implements OnInit {
 
   // ---- Products: Search, Sort, Paginate ----
   filterProducts(): void {
-    const q = this.productSearch.toLowerCase().trim();
+    const q = (this.productSearch || '').toLowerCase().trim();
     const cat = this.productCategoryFilter;
     this.filteredProducts = this.allProducts.filter(p => {
       const matchesSearch =
-        p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.description?.toLowerCase().includes(q);
+        (p.name?.toLowerCase() || '').includes(q) ||
+        (p.category?.toLowerCase() || '').includes(q) ||
+        (p.description?.toLowerCase() || '').includes(q);
       const matchesCategory = !cat || p.category === cat;
       return matchesSearch && matchesCategory;
     });
+    this.productTypeaheadResults = q ? this.filteredProducts.slice(0, 5) : [];
     if (this.productSortField) this.applySortProducts();
     this.productPage = 1;
     this.cdr.markForCheck();
+  }
+
+  onProductSearchFocus() {
+    if (this.productSearch.trim().length > 0) {
+       this.showProductTypeahead = true;
+       this.cdr.markForCheck();
+    }
+  }
+
+  onProductSearchBlur() {
+    setTimeout(() => {
+      this.showProductTypeahead = false;
+      this.cdr.markForCheck();
+    }, 200);
+  }
+
+  selectProductTypeahead(product: Iproduct) {
+    this.productSearch = product.name;
+    this.showProductTypeahead = false;
+    this.filterProducts();
   }
 
   sortProducts(field: string): void {
@@ -179,19 +205,42 @@ export class Dashboard implements OnInit {
 
   // ---- Orders: Search, Filter, Sort, Paginate ----
   filterOrders(): void {
-    const q = this.orderSearch.toLowerCase().trim();
+    const q = (this.orderSearch || '').toLowerCase().trim();
     const status = this.orderStatusFilter;
-    this.filteredOrders = this.allOrders.filter((o: any) => {
+    this.filteredOrders = this.allOrders.filter(o => {
       const matchesSearch =
-        (o._id?.toLowerCase().includes(q)) ||
-        (o.user?.name?.toLowerCase().includes(q)) ||
-        (o.user?.email?.toLowerCase().includes(q));
+        ((o._id || '').toLowerCase().includes(q)) ||
+        ((o.user?.name || '').toLowerCase().includes(q)) ||
+        ((o.user?.email || '').toLowerCase().includes(q));
       const matchesStatus = !status || o.status === status;
       return matchesSearch && matchesStatus;
     });
+    this.orderTypeaheadResults = q ? this.filteredOrders.slice(0, 5) : [];
     if (this.orderSortField) this.applySortOrders();
     this.orderPage = 1;
     this.cdr.markForCheck();
+  }
+
+  onOrderSearchFocus() {
+    if (this.orderSearch.trim().length > 0) {
+       this.showOrderTypeahead = true;
+       this.cdr.markForCheck();
+    }
+  }
+
+  onOrderSearchBlur() {
+    setTimeout(() => {
+      this.showOrderTypeahead = false;
+      this.cdr.markForCheck();
+    }, 200);
+  }
+
+  selectOrderTypeahead(order: IOrder) {
+    if (order && order._id) {
+       this.orderSearch = order._id.slice(-6).toUpperCase();
+       this.showOrderTypeahead = false;
+       this.filterOrders();
+    }
   }
 
   sortOrders(field: string): void {

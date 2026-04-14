@@ -84,7 +84,16 @@
         <div class="datatable-toolbar">
           <div class="search-box">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search products..." [(ngModel)]="productSearch" (ngModelChange)="filterProducts()" id="productSearchInput">
+            <input type="text" placeholder="Search products..." [(ngModel)]="productSearch" (ngModelChange)="filterProducts()" (focus)="onProductSearchFocus()" (blur)="onProductSearchBlur()" (keyup)="onProductSearchFocus()" id="productSearchInput">
+            
+            <!-- Typeahead Dropdown -->
+            <ul class="typeahead-dropdown" *ngIf="showProductTypeahead && productTypeaheadResults.length > 0">
+              <li *ngFor="let result of productTypeaheadResults" (mousedown)="$event.preventDefault(); selectProductTypeahead(result)">
+                <img [src]="result.image || 'https://placehold.co/24x24/f5f5f5/999?text=?'" [alt]="result.name" class="typeahead-img">
+                <span class="typeahead-name">{{ result.name }}</span>
+                <span class="typeahead-cat">{{ result.category }}</span>
+              </li>
+            </ul>
           </div>
           <div class="toolbar-right">
             <select class="status-filter" [(ngModel)]="productCategoryFilter" (ngModelChange)="filterProducts()" id="productCategoryFilter">
@@ -178,7 +187,16 @@
         <div class="datatable-toolbar">
           <div class="search-box">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search orders..." [(ngModel)]="orderSearch" (ngModelChange)="filterOrders()" id="orderSearchInput">
+            <input type="text" placeholder="Search orders..." [(ngModel)]="orderSearch" (ngModelChange)="filterOrders()" (focus)="onOrderSearchFocus()" (blur)="onOrderSearchBlur()" (keyup)="onOrderSearchFocus()" id="orderSearchInput">
+            
+            <!-- Typeahead Dropdown -->
+            <ul class="typeahead-dropdown" *ngIf="showOrderTypeahead && orderTypeaheadResults.length > 0">
+              <li *ngFor="let result of orderTypeaheadResults" (mousedown)="$event.preventDefault(); selectOrderTypeahead(result)">
+                <span class="typeahead-id">#{{ result._id | slice:-6 | uppercase }}</span>
+                <span class="typeahead-name">{{ result.user?.name || 'Unknown' }}</span>
+                <span class="typeahead-cat status-{{result.status}}">{{ result.status }}</span>
+              </li>
+            </ul>
           </div>
           <div class="toolbar-right">
             <select class="status-filter" [(ngModel)]="orderStatusFilter" (ngModelChange)="filterOrders()" id="orderStatusFilter">

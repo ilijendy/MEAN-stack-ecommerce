@@ -24,7 +24,18 @@
   </section>
 
   <section class="controls-section">
-    <input type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchQuery" (input)="searchProducts()">
+    <div class="search-box-wrapper">
+      <input type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchQuery" (input)="searchProducts()" (focus)="onSearchFocus()" (blur)="onSearchBlur()">
+      
+      <!-- Typeahead Dropdown -->
+      <ul class="typeahead-dropdown" *ngIf="showTypeahead && typeaheadResults.length > 0">
+        <li *ngFor="let result of typeaheadResults" (mousedown)="$event.preventDefault(); selectTypeahead(result)">
+          <img [src]="result.image || 'https://placehold.co/24x24/f5f5f5/999?text=?'" [alt]="result.name" class="typeahead-img">
+          <span class="typeahead-name">{{ result.name }}</span>
+          <span class="typeahead-cat">{{ result.category }}</span>
+        </li>
+      </ul>
+    </div>
     <select class="category-select" [(ngModel)]="selectedCategory" (change)="filterByCategory()">
       @for(cat of categoreies; track cat.value) {
         <option [value]="cat.value">{{ cat.label }}</option>

@@ -25,6 +25,8 @@ export class Products implements OnInit, OnDestroy {
     { label: 'Accessories', value: 'accessory' }]
   error: string = '';
   loading: boolean = false;
+  showTypeahead: boolean = false;
+  typeaheadResults: Iproduct[] = [];
 
   // Pagination
   currentPage = 1;
@@ -142,23 +144,54 @@ export class Products implements OnInit, OnDestroy {
     }
   }
 
+  onSearchFocus() {
+    if (this.searchQuery.trim().length > 0) {
+      if (this.filterProducts.length > 0) {
+        this.typeaheadResults = this.filterProducts.slice(0, 5);
+      }
+      this.showTypeahead = true;
+      this.cdr.markForCheck();
+    }
+  }
+
+  onSearchBlur() {
+    setTimeout(() => {
+      this.showTypeahead = false;
+      this.cdr.markForCheck();
+    }, 200);
+  }
+
+  selectTypeahead(product: Iproduct) {
+    if (product && product.name) {
+      this.searchQuery = product.name;
+      this.showTypeahead = false;
+      this.searchProducts();
+    }
+  }
+
   searchProducts() {
     this.selectedCategory = 'all';
     this.currentPage = 1;
     if (this.searchQuery.trim() === '') {
       this.filterProducts = this.products;
+      this.showTypeahead = false;
+      this.typeaheadResults = [];
     }
     else {
-      this.loading = true;
       this.productService.searchProduct(this.searchQuery).subscribe({
         next: (res) => {
           this.filterProducts = res.data;
+          this.typeaheadResults = res.data.slice(0, 5);
+          if (this.searchQuery.trim().length > 0) {
+             this.showTypeahead = true;
+          }
           this.loading = false;
           this.currentPage = 1;
           this.cdr.markForCheck();
         },
         error: (err) => {
           this.filterProducts = [];
+          this.typeaheadResults = [];
           this.error = 'Failed to load products';
           this.loading = false;
           this.cdr.markForCheck();

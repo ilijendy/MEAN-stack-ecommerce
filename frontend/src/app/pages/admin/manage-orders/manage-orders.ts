@@ -24,6 +24,8 @@ export class ManageOrders implements OnInit {
   // Search & Filter
   searchQuery = '';
   statusFilter = '';
+  showTypeahead = false;
+  typeaheadResults: IOrder[] = [];
 
   // Sort
   sortField = '';
@@ -82,19 +84,42 @@ export class ManageOrders implements OnInit {
 
   // --- Search, Filter, Sort ---
   applyFilters(): void {
-    const q = this.searchQuery.toLowerCase().trim();
+    const q = (this.searchQuery || '').toLowerCase().trim();
     const status = this.statusFilter;
     this.filteredOrders = this.orders.filter(o => {
       const matchesSearch =
-        (o._id?.toLowerCase().includes(q)) ||
-        (o.user?.name?.toLowerCase().includes(q)) ||
-        (o.user?.email?.toLowerCase().includes(q));
+        ((o._id || '').toLowerCase().includes(q)) ||
+        ((o.user?.name || '').toLowerCase().includes(q)) ||
+        ((o.user?.email || '').toLowerCase().includes(q));
       const matchesStatus = !status || o.status === status;
       return matchesSearch && matchesStatus;
     });
+    this.typeaheadResults = q ? this.filteredOrders.slice(0, 5) : [];
     if (this.sortField) this.applySort();
     this.currentPage = 1;
     this.cdr.markForCheck();
+  }
+
+  onSearchFocus() {
+    if(this.searchQuery.trim().length > 0) {
+       this.showTypeahead = true;
+       this.cdr.markForCheck();
+    }
+  }
+
+  onSearchBlur() {
+    setTimeout(() => {
+      this.showTypeahead = false;
+      this.cdr.markForCheck();
+    }, 200);
+  }
+
+  selectTypeahead(order: IOrder) {
+    if (order && order._id) {
+       this.searchQuery = order._id.slice(-6).toUpperCase();
+       this.showTypeahead = false;
+       this.applyFilters();
+    }
   }
 
   sortBy(field: string): void {

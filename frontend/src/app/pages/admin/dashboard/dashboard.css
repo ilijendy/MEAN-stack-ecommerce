@@ -250,6 +250,72 @@
   color: #94a3b8;
 }
 
+/* Typeahead */
+.search-box {
+  position: relative;
+  z-index: 50;
+}
+.typeahead-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 8px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  list-style: none;
+  padding: 8px 0;
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.typeahead-dropdown li {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.typeahead-dropdown li:hover {
+  background: #f8fafc;
+}
+.typeahead-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.typeahead-id {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 600;
+  color: #64748b;
+  font-size: 12px;
+}
+.typeahead-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e293b;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.typeahead-cat {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+.typeahead-cat.status-pending { background: #fef3c7; color: #b45309; }
+.typeahead-cat.status-processing { background: #e0e7ff; color: #4338ca; }
+.typeahead-cat.status-shipped { background: #dbeafe; color: #1d4ed8; }
+.typeahead-cat.status-delivered { background: #d1fae5; color: #047857; }
+.typeahead-cat.status-cancelled { background: #fee2e2; color: #b91c1c; }
+
 .toolbar-right {
   display: flex;
   align-items: center;

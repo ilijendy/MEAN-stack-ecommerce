@@ -38,6 +38,8 @@ export class ManageProducts implements OnInit {
   // Search & Filter
   searchQuery = '';
   categoryFilter = '';
+  showTypeahead = false;
+  typeaheadResults: Iproduct[] = [];
 
   // Sort
   sortField = '';
@@ -99,19 +101,40 @@ export class ManageProducts implements OnInit {
 
   // --- Search, Filter, Sort ---
   applyFilters(): void {
-    const q = this.searchQuery.toLowerCase().trim();
+    const q = (this.searchQuery || '').toLowerCase().trim();
     const cat = this.categoryFilter;
     this.filteredProducts = this.products.filter(p => {
       const matchesSearch =
-        p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.description?.toLowerCase().includes(q);
+        (p.name?.toLowerCase() || '').includes(q) ||
+        (p.category?.toLowerCase() || '').includes(q) ||
+        (p.description?.toLowerCase() || '').includes(q);
       const matchesCategory = !cat || p.category === cat;
       return matchesSearch && matchesCategory;
     });
+    this.typeaheadResults = q ? this.filteredProducts.slice(0, 5) : [];
     if (this.sortField) this.applySort();
     this.currentPage = 1;
     this.cdr.markForCheck();
+  }
+
+  onSearchFocus() {
+    if(this.searchQuery.trim().length > 0) {
+       this.showTypeahead = true;
+       this.cdr.markForCheck();
+    }
+  }
+
+  onSearchBlur() {
+    setTimeout(() => {
+      this.showTypeahead = false;
+      this.cdr.markForCheck();
+    }, 200);
+  }
+
+  selectTypeahead(product: Iproduct) {
+    this.searchQuery = product.name;
+    this.showTypeahead = false;
+    this.applyFilters();
   }
 
   sortBy(field: string): void {

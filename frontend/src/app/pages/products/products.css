@@ -145,6 +145,65 @@
   border-color: #0d9488;
 }
 
+/* Home Typeahead */
+.search-box-wrapper {
+  position: relative;
+  z-index: 50;
+}
+
+.typeahead-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 8px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  list-style: none;
+  padding: 8px 0;
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+  text-align: left;
+}
+.typeahead-dropdown li {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.typeahead-dropdown li:hover {
+  background: #f8fafc;
+}
+.typeahead-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.typeahead-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e293b;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.typeahead-cat {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: capitalize;
+  background: #f0fdfa;
+  color: #0d9488;
+}
+
 .category-select {
   padding: 10px 16px;
   border: 2px solid #e0e0e0;
