@@ -1,7 +1,7 @@
 <div class="orders-container">
   <div class="header-actions">
     <h2>Manage Orders</h2>
-    <span class="order-count" *ngIf="orders.length > 0">{{orders.length}} Total Orders</span>
+    <span class="order-count" *ngIf="orders.length > 0">{{ orders.length }} Total Orders</span>
   </div>
 
   <div *ngIf="loading" class="loader-container">
@@ -18,21 +18,56 @@
     <p>There are currently no orders in the system.</p>
   </div>
 
-  <div class="table-card" *ngIf="!loading && orders.length > 0">
+  <!-- Datatable -->
+  <div class="datatable-card" *ngIf="!loading && orders.length > 0">
+    <!-- Toolbar -->
+    <div class="datatable-toolbar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search by ID, customer..." [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()" id="orderSearch">
+      </div>
+      <div class="toolbar-right">
+        <select class="filter-select" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()" id="statusFilter">
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <div class="toolbar-info">
+          Showing {{ paginatedOrders.length }} of {{ filteredOrders.length }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
     <div class="table-responsive">
-      <table class="orders-table">
+      <table class="datatable">
         <thead>
           <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Date</th>
-            <th>Amount</th>
+            <th class="sortable" (click)="sortBy('_id')">
+              Order ID
+              <span class="sort-icon" [class.asc]="sortField === '_id' && sortDir === 'asc'" [class.desc]="sortField === '_id' && sortDir === 'desc'">⇅</span>
+            </th>
+            <th class="sortable" (click)="sortBy('user')">
+              Customer
+              <span class="sort-icon" [class.asc]="sortField === 'user' && sortDir === 'asc'" [class.desc]="sortField === 'user' && sortDir === 'desc'">⇅</span>
+            </th>
+            <th class="sortable" (click)="sortBy('createdAt')">
+              Date
+              <span class="sort-icon" [class.asc]="sortField === 'createdAt' && sortDir === 'asc'" [class.desc]="sortField === 'createdAt' && sortDir === 'desc'">⇅</span>
+            </th>
+            <th class="sortable" (click)="sortBy('totalAmount')">
+              Amount
+              <span class="sort-icon" [class.asc]="sortField === 'totalAmount' && sortDir === 'asc'" [class.desc]="sortField === 'totalAmount' && sortDir === 'desc'">⇅</span>
+            </th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of paginatedOrders" [class.updating]="updatingStatusFor === order._id">
+          <tr *ngFor="let order of paginatedOrders" class="table-row" [class.updating]="updatingStatusFor === order._id">
             <td class="id-cell">#{{ order._id | slice:-6 | uppercase }}</td>
             <td>
               <div class="customer-info" *ngIf="order.user">
@@ -44,16 +79,16 @@
               </div>
             </td>
             <td>{{ order.createdAt | date:'mediumDate' }}</td>
-            <td class="amount-cell">${{ order.totalAmount }}</td>
+            <td class="amount-cell">${{ order.totalAmount | number:'1.2-2' }}</td>
             <td>
               <span class="status-badge" [ngClass]="order.status">
                 {{ order.status }}
               </span>
             </td>
             <td>
-              <select 
-                class="status-dropdown" 
-                [value]="order.status" 
+              <select
+                class="status-dropdown"
+                [value]="order.status"
                 (change)="changeStatus(order._id, $event)"
                 [disabled]="updatingStatusFor === order._id">
                 <option *ngFor="let option of statusOptions" [value]="option">
@@ -62,25 +97,29 @@
               </select>
             </td>
           </tr>
+          <tr *ngIf="filteredOrders.length === 0">
+            <td colspan="6" class="empty-table-cell">
+              <div class="empty-table">No orders match your filters</div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- Pagination -->
-  <nav class="pagination" *ngIf="totalPages > 1">
-    <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <button 
-      *ngFor="let page of pageNumbers" 
-      class="page-btn" 
-      [class.active]="page === currentPage"
-      (click)="goToPage(page)">
-      {{ page }}
-    </button>
-    <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-  </nav>
+    <!-- Pagination Footer -->
+    <div class="datatable-footer" *ngIf="totalPages > 1">
+      <div class="page-info">Page {{ currentPage }} of {{ totalPages }}</div>
+      <nav class="dt-pagination">
+        <button class="dt-page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button *ngFor="let page of pageNumbers" class="dt-page-btn" [class.active]="page === currentPage" (click)="goToPage(page)">
+          {{ page }}
+        </button>
+        <button class="dt-page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </nav>
+    </div>
+  </div>
 </div>

@@ -22,10 +22,6 @@
     <div class="product-image-section">
       <div class="image-wrapper">
         <img [src]="product.image" [alt]="product.name" class="main-image">
-        <div class="stock-badge" [class.low-stock]="product.stock < 5">
-          <span *ngIf="product.stock > 0">In Stock ({{product.stock}})</span>
-          <span *ngIf="product.stock === 0">Out of Stock</span>
-        </div>
       </div>
     </div>
 
@@ -52,10 +48,10 @@
         <div class="quantity-selector">
           <button class="qty-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
           <input type="number" class="qty-input" [value]="quantity" readonly>
-          <button class="qty-btn" (click)="increaseQuantity()" [disabled]="quantity >= product.stock">+</button>
+          <button class="qty-btn" (click)="increaseQuantity()">+</button>
         </div>
 
-        <button class="add-to-cart-btn" (click)="addtoCart()" [disabled]="product.stock === 0">
+        <button class="add-to-cart-btn" (click)="addtoCart()">
           <span class="btn-text">Add to Cart</span>
           <span class="btn-icon">🛒</span>
         </button>

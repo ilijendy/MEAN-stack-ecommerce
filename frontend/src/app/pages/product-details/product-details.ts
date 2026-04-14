@@ -51,7 +51,7 @@ export class ProductDetails {
     });
   }
   increaseQuantity(){
-    if(this.product&&this.quantity<this.product.stock){
+    if(this.product){
       this.quantity++;
     }
   }

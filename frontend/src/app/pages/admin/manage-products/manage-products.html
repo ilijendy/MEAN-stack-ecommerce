@@ -72,21 +72,53 @@
     </form>
   </div>
 
-  <!-- Products Table -->
-  <div class="table-card" *ngIf="!loading && products.length > 0">
+  <!-- Datatable -->
+  <div class="datatable-card" *ngIf="!loading && products.length > 0">
+    <!-- Toolbar -->
+    <div class="datatable-toolbar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search products..." [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()" id="productSearch">
+      </div>
+      <div class="toolbar-right">
+        <select class="filter-select" [(ngModel)]="categoryFilter" (ngModelChange)="applyFilters()" id="categoryFilter">
+          <option value="">All Categories</option>
+          <option value="laptop">Laptop</option>
+          <option value="mobile">Mobile</option>
+          <option value="accessory">Accessory</option>
+        </select>
+        <div class="toolbar-info">
+          Showing {{ paginatedProducts.length }} of {{ filteredProducts.length }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
     <div class="table-responsive">
-      <table class="products-table">
+      <table class="datatable">
         <thead>
           <tr>
-            <th>Product</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
+            <th class="sortable" (click)="sortBy('name')">
+              Product
+              <span class="sort-icon" [class.asc]="sortField === 'name' && sortDir === 'asc'" [class.desc]="sortField === 'name' && sortDir === 'desc'">⇅</span>
+            </th>
+            <th class="sortable" (click)="sortBy('category')">
+              Category
+              <span class="sort-icon" [class.asc]="sortField === 'category' && sortDir === 'asc'" [class.desc]="sortField === 'category' && sortDir === 'desc'">⇅</span>
+            </th>
+            <th class="sortable" (click)="sortBy('price')">
+              Price
+              <span class="sort-icon" [class.asc]="sortField === 'price' && sortDir === 'asc'" [class.desc]="sortField === 'price' && sortDir === 'desc'">⇅</span>
+            </th>
+            <th class="sortable" (click)="sortBy('stock')">
+              Stock
+              <span class="sort-icon" [class.asc]="sortField === 'stock' && sortDir === 'asc'" [class.desc]="sortField === 'stock' && sortDir === 'desc'">⇅</span>
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of paginatedProducts">
+          <tr *ngFor="let product of paginatedProducts" class="table-row">
             <td>
               <div class="product-info">
                 <img [src]="product.image || 'https://placehold.co/48x48/f5f5f5/999?text=?'" [alt]="product.name" class="product-thumb">
@@ -99,7 +131,7 @@
             <td><span class="category-pill">{{ product.category }}</span></td>
             <td class="price-cell">${{ product.price | number:'1.2-2' }}</td>
             <td>
-              <span [class.low-stock]="product.stock < 5">{{ product.stock }}</span>
+              <span class="stock-indicator" [class.low]="product.stock < 5" [class.out]="product.stock === 0">{{ product.stock }}</span>
             </td>
             <td>
               <div class="action-btns">
@@ -112,27 +144,31 @@
               </div>
             </td>
           </tr>
+          <tr *ngIf="filteredProducts.length === 0">
+            <td colspan="5" class="empty-table-cell">
+              <div class="empty-table">No products match your filters</div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- Pagination -->
-  <nav class="pagination" *ngIf="totalPages > 1">
-    <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <button 
-      *ngFor="let page of pageNumbers" 
-      class="page-btn" 
-      [class.active]="page === currentPage"
-      (click)="goToPage(page)">
-      {{ page }}
-    </button>
-    <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-  </nav>
+    <!-- Pagination Footer -->
+    <div class="datatable-footer" *ngIf="totalPages > 1">
+      <div class="page-info">Page {{ currentPage }} of {{ totalPages }}</div>
+      <nav class="dt-pagination">
+        <button class="dt-page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button *ngFor="let page of pageNumbers" class="dt-page-btn" [class.active]="page === currentPage" (click)="goToPage(page)">
+          {{ page }}
+        </button>
+        <button class="dt-page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </nav>
+    </div>
+  </div>
 
   <!-- Empty State -->
   <div class="empty-state" *ngIf="!loading && products.length === 0 && !showForm">

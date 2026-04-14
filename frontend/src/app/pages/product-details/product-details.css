@@ -101,26 +101,6 @@
   transform: scale(1.08) translateY(-10px);
 }
 
-.stock-badge {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  padding: 8px 16px;
-  border-radius: 30px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.stock-badge.low-stock {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.2);
-}
-
 .product-info-section {
   display: flex;
   flex-direction: column;

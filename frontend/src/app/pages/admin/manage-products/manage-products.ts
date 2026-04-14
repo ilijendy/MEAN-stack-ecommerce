@@ -16,6 +16,7 @@ export class ManageProducts implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   products: Iproduct[] = [];
+  filteredProducts: Iproduct[] = [];
   loading = true;
   error = '';
   successMessage = '';
@@ -34,18 +35,35 @@ export class ManageProducts implements OnInit {
   };
   imagePreview: string | null = null;
 
+  // Search & Filter
+  searchQuery = '';
+  categoryFilter = '';
+
+  // Sort
+  sortField = '';
+  sortDir: 'asc' | 'desc' = 'asc';
+
   // Pagination
   currentPage = 1;
   itemsPerPage = 8;
+
   get totalPages(): number {
-    return Math.ceil(this.products.length / this.itemsPerPage);
+    return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
   }
   get paginatedProducts(): Iproduct[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
-    return this.products.slice(start, start + this.itemsPerPage);
+    return this.filteredProducts.slice(start, start + this.itemsPerPage);
   }
   get pageNumbers(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    const total = this.totalPages;
+    const current = this.currentPage;
+    const pages: number[] = [];
+    const maxVisible = 5;
+    let start = Math.max(1, current - Math.floor(maxVisible / 2));
+    let end = Math.min(total, start + maxVisible - 1);
+    if (end - start + 1 < maxVisible) start = Math.max(1, end - maxVisible + 1);
+    for (let i = start; i <= end; i++) pages.push(i);
+    return pages;
   }
   goToPage(page: number) {
     if (page < 1 || page > this.totalPages) return;
@@ -67,8 +85,8 @@ export class ManageProducts implements OnInit {
     this.productService.getAllProduct().subscribe({
       next: (res: any) => {
         this.products = Array.isArray(res.data) ? res.data : [];
+        this.applyFilters();
         this.loading = false;
-        this.currentPage = 1;
         this.cdr.markForCheck();
       },
       error: (err: any) => {
@@ -79,6 +97,47 @@ export class ManageProducts implements OnInit {
     });
   }
 
+  // --- Search, Filter, Sort ---
+  applyFilters(): void {
+    const q = this.searchQuery.toLowerCase().trim();
+    const cat = this.categoryFilter;
+    this.filteredProducts = this.products.filter(p => {
+      const matchesSearch =
+        p.name.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q);
+      const matchesCategory = !cat || p.category === cat;
+      return matchesSearch && matchesCategory;
+    });
+    if (this.sortField) this.applySort();
+    this.currentPage = 1;
+    this.cdr.markForCheck();
+  }
+
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDir = 'asc';
+    }
+    this.applySort();
+    this.cdr.markForCheck();
+  }
+
+  private applySort(): void {
+    const dir = this.sortDir === 'asc' ? 1 : -1;
+    const field = this.sortField;
+    this.filteredProducts.sort((a: any, b: any) => {
+      const valA = typeof a[field] === 'string' ? a[field].toLowerCase() : a[field];
+      const valB = typeof b[field] === 'string' ? b[field].toLowerCase() : b[field];
+      if (valA < valB) return -1 * dir;
+      if (valA > valB) return 1 * dir;
+      return 0;
+    });
+  }
+
+  // --- Form CRUD ---
   openAddForm() {
     this.showForm = true;
     this.isEditing = false;
